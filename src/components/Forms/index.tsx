@@ -39,13 +39,14 @@ function Forms (){
             <input 
                 onChange={(event) => {
                     let price = event.target.value;
-                    let b = price.replace(/[^0-9.]/g, '');
-                    if (b.indexOf(".") !== -1) {
-                        b = b.substring(0, b.indexOf(".") + 3);
-                    } 
-                    b = b.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-                    if (b === ""){b = ""}
-                    setTime(b)}
+                    price = price.replace(/[^0-9]/g, '');
+                    // let b = price.replace(/[^0-9.]/g, '');
+                    // if (b.indexOf(".") !== -1) {
+                    //     b = b.substring(0, b.indexOf(".") + 3);
+                    // } 
+                    // b = b.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+                    // if (b === ""){b = ""}
+                    setTime(price)}
                 }
                 value={newTime}
                 placeholder="00.00"

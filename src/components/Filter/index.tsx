@@ -11,21 +11,12 @@ function Filter({setExpenses}){
     const Filters = (ev : string) : void => {
         setOptions(ev);
 
-        if (ev !== 'all'){
+        if (ev !== 'All'){
             const newItem : Array<object> = Data.filter((newVal : Expenses) => {
                 let month : string =  newVal.date.slice(3).slice(0, -5) 
                 return month === ev; 
             });
-            setExpenses(newItem)
-            //     else {
-            //         const item ={
-            //             newTime:"nothing",
-            //              option:" ",
-            //              date:" "
-            //         } 
-            //         setExpenses(item)
-            //     }
-        } else{setExpenses(Data)}
+            setExpenses(newItem)} else{setExpenses(Data)}
     }
     
     return(
@@ -35,7 +26,7 @@ function Filter({setExpenses}){
             onChange={(event) => Filters(event.target.value)}
             className="focus:border-orange-500 
             focus:outline-none focus:ring-1 
-            focus:ring-orange-500 text-sm 
+            focus:ring-orange-500 text-lg 
             w-fill cursor-pointer rounded-xl px-2">
                 {months.map(m => <option key={uuid4()}>{m}</option>)}
             </select>
