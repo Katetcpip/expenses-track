@@ -1,4 +1,4 @@
-const Data = [
+const Data : Array <object> = [
     {
         newTime: "1200",
         option: "Clothes",

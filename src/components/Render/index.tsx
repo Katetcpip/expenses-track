@@ -1,11 +1,17 @@
 import uuid4 from "uuid4";
 
+export type Expenses = {
+    date : string,
+    option : string,
+    newTime : string
+}
+
 function Render({expenses}){
 
     let CurrencyFormat = require('react-currency-format');
     return(
         <>
-        {expenses.length > 0 && expenses.map(ex => {
+        {expenses.length > 0 && expenses.map((ex : Expenses)  => {
         return(
             <div className="flex flex-col w-full" key={uuid4()}>
             <div className="flex flex-row justify-between border-b border-orange-500 w-full p-4 mb-2 items-end">

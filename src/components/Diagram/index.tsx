@@ -7,11 +7,11 @@ function Diagram({expenses, sum}) {
 
     let obj = [];
     items.map(ex => {
-    let a = {
-       value:  sum(expenses, ex).props.value
-    }
-    obj.push(a)
-    return(a)
+      let a = {
+        value: sum(expenses, ex).props.value
+      }
+      obj.push(a)
+      return(a)
     })
 
   return (
