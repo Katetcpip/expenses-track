@@ -1,14 +1,6 @@
 import { PieChart, Pie, Cell } from "recharts";
 import { items } from "components/Forms";
 
-// const data = [
-//   {  value: 400 },
-//   { value: 400 },
-//   {  value: 300 },
-//   {  value: 200 },
-//   {  value: 100 }
-// ];
-
 const COLORS = ["#dbeafe", "#ede9fe", "#fce7f3", "#fef9c3", "#dcfce7"];
 
 function Diagram({expenses, sum}) {
