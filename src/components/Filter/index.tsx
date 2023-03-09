@@ -16,7 +16,7 @@ function Filter({setExpenses}){
                 let month : string =  newVal.date.slice(3).slice(0, -5) 
                 return month === ev; 
             });
-            {setExpenses(newItem)}
+            setExpenses(newItem)
             //     else {
             //         const item ={
             //             newTime:"nothing",
