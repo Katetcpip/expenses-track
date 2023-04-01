@@ -1,3 +1,11 @@
 .Font {
     font-size: 20px;
 }
+
+.borderStyle {
+    @apply flex flex-row justify-between pl-2 pr-2 w-full mt-4 border border-solid border-slate-200 p-1 cursor-pointer
+}
+
+.buttonFilter {
+    @apply h-fit pl-2 pr-2 border border-solid border-slate-200 rounded-md duration-300
+}
