@@ -28,7 +28,8 @@ function Forms (){
             newTime,
             option,
             date: time,
-            value: "-"
+            value: "-",
+            id: uuid4()
         } 
         addNewItem(item)
         setTime("")
@@ -41,7 +42,8 @@ function Forms (){
              newTime: Balans,
              option: cathegory,
              date: time,
-             value: "+"
+             value: "+",
+             id: uuid4()
          } 
          addNewItem(item)
          setCathegory("")
@@ -50,6 +52,23 @@ function Forms (){
 
     const addNewItem = (item : Expenses): void =>{
         Data.unshift(item)
+        currentAmount(expenses)
+        localStorage.setItem('notes', JSON.stringify(Data))
+    }
+
+    const deleteItem = (ex : Expenses) : void => {
+        let newData : Array<Expenses> = JSON.parse(JSON.stringify(expenses))
+        const newItems: Expenses[] = newData.filter(it => it.id !== ex.id);
+        setExpenses(newItems);
+        localStorage.setItem("notes", JSON.stringify(newItems));
+    }
+
+    const currentAmount = (expenses) => {
+        let sum = 0;
+        expenses.map(ex => {
+            ex.value === "-" ? (sum = sum - Number(ex.newTime)) : (sum = sum + Number(ex.newTime))
+        })
+        return sum;
     }
 
     return(
@@ -58,7 +77,7 @@ function Forms (){
         <div className="flex flex-row justify-start w-full mb-8">
         <img alt="" className="h-20 w-36 mr-4 hover:scale-110 hover:-rotate-2 duration-300 hover:shadow-md" src="https://alfabank.servicecdn.ru/media/everyday/debit-cards/alfacard-benefits_03-12-2020.png"/>
         <div className="flex flex-col">
-            <p className="text-xl font-thin">00,00 ₽</p>
+            <p className="text-xl font-thin">{currentAmount(expenses)},00 ₽</p>
             <p className="text-xs font-semibold">Current account</p>
         </div>
         </div>
@@ -117,11 +136,6 @@ function Forms (){
                 <Button title="ADD" type="submit" handleClick={handleClickExpenses} />
          </form>
 
-
-
-
-
-
         <div onClick={() => setIsActive(!isActive)}
             className={isActive === true ? "rounded-t-md borderStyle" : "rounded-md borderStyle"}>
             <p className="lg:text-base text-sm font-semibold">Diagrams</p>
@@ -140,7 +154,7 @@ function Forms (){
             <FilterMonth setExpenses={setExpenses}/>
         </div>
         
-        <Render expenses={expenses} />
+        <Render expenses={expenses} deleteItem={deleteItem}/>
         
        </div>
     );
