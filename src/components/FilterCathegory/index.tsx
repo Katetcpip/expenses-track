@@ -1,9 +1,8 @@
 import uuid4 from "uuid4";
 import { useState } from "react";
-import Data from "components/Data";
 import { Expenses } from "components/Render";
 
-function FilterCathegory({setExpenses}){
+function FilterCathegory({setExpenses, expenses}){
 
     const cathegory : Array<string>= ['Cathegory','Food', 'Entertainment', 'Education', 'Rent', 'Clothes']
     const [options, setOptions] = useState('cathegory')
@@ -12,10 +11,10 @@ function FilterCathegory({setExpenses}){
         setOptions(ev);
 
         if (ev !== 'Cathegory'){
-            const newItem : Array<object> = Data.filter((newVal : Expenses) => {
+            const newItem : Array<object> = JSON.parse(localStorage.getItem('notes')).filter((newVal : Expenses) => {
                 return  newVal.option === ev;
             });
-            setExpenses(newItem)} else{setExpenses(Data)}
+            setExpenses(newItem)} else{setExpenses(JSON.parse(localStorage.getItem('notes')))}
     }
     
     return(

@@ -1,24 +1,27 @@
-const Data : Array <object> = [
+import { v4 } from "uuid";
+import { Expenses } from "components/Render";
+
+const Data : Expenses[] = [
     {
         newTime: "1200",
         option: "Clothes",
         date:"12 February 2022",
         value: "-",
-        id: '1'
+        id: v4()
     },
     {
-        newTime:"5850",
-        option:"Rent",
+        newTime:"10050",
+        option:"Cashback",
         date:"30 May 2022",
-        value: "-",
-        id: '2'
+        value: "+",
+        id: v4()
     },
     {  
         newTime:"6000",
         option:"Education",
         date:"14 May 2022",
         value: "-",
-        id: '3'
+        id: v4()
     }
 ];  //моковые данные
 

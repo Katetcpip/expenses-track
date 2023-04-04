@@ -1,15 +1,15 @@
-function Button({type, handleClick, title}) {
+function Button({type, onClick, title}) {
 
     return(
         <button 
-            onClick={(event) => handleClick(event)} 
+            onClick={(event) => onClick(event)} 
             type={type}
-            className="bg-red-600 
-            rounded-md lg:py-2 py-2 shadow-sm focus:border-orange-500 duration-300
+            className="rounded-md lg:py-2 py-2 hover:shadow-md duration-300
             sm:text-sm text-sm
-            hover:bg-red-700
-            md:w-1/6 w-full cursor-pointer
-            text-white text-center"
+            font-semibold
+            hover:bg-slate-100
+            md:w-fit md:px-2 w-full cursor-pointer
+            text-red-600 text-center"
             > {title}</button>
     );
 }

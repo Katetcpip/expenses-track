@@ -1,14 +1,14 @@
 import { PieChart, Pie, Cell } from "recharts";
-import { items } from "components/Forms";
+import { itemsIncome } from "components/Forms";
 
-const COLORS = ["#dbeafe", "#ede9fe", "#fce7f3", "#fef9c3", "#dcfce7"];
+const COLORS = ["#dbeafe", "#ede9fe", "#fce7f3", "#dcfce7"];
 
-function Diagram({expenses, sum}) {
+function DiagramIncome({sum}) {
 
     let obj = [];
-    items.map(ex => {
+    itemsIncome.map(ex => {
       let a = {
-        value: sum(expenses, ex).props.value
+        value: sum(ex).props.value
       }
       obj.push(a)
       return(a)
@@ -33,4 +33,4 @@ function Diagram({expenses, sum}) {
   );
 }
 
-export default Diagram;
+export default DiagramIncome;

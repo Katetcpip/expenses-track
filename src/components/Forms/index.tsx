@@ -1,72 +1,76 @@
 import { useState } from "react";
 import 'components/Forms/styles.css';
 import Button from "components/ButtonAdd";
-import SumAll from "components/SumAll";
-import uuid4 from "uuid4";
+import SumAllExpenses from "components/SumAllExpenses";
+import SumAllIncome from "components/SumAllIncome";
+import { v4 } from "uuid";
 import { format } from 'date-fns';
 import FilterMonth from "components/FilterMonth";
 import Render from "components/Render";
 import Data from "components/Data";
 import { Expenses } from "components/Render";
 import FilterCathegory from "components/FilterCathegory";
+import ButtonFilters from "components/ButtonFilters";
 
-export const items: Array<string> =["Food", "Entertainment", "Education", "Rent", "Clothes"];
-  
+export const itemsExpenses: Array<string> =["Food", "Entertainment", "Education", "Rent", "Clothes"];
+export const itemsIncome: Array<string> =["Cashback", "Salary", "Deposit", "Flat"];
+ 
 function Forms (){
 
     const [newTime, setTime] = useState("");
-    const [expenses, setExpenses] = useState(Data);
-    const [option, setOption] = useState(items[0]);
+    const [expenses, setExpenses] = useState<Expenses[]>(Data);
+    const [optionExpenses, setOptionExpenses] = useState(itemsExpenses[0]);
+    const [optionIncome, setOptionIncome] = useState(itemsIncome[0]);
     const [isActive, setIsActive] = useState(false);
     const [Balans, setBalans] = useState('');
-    const [cathegory, setCathegory] = useState('');
+    const [date, setDate] = useState(format(new Date(), 'dd MMMM yyyy'));
 
     const handleClickExpenses = (event:React.MouseEvent<HTMLButtonElement, MouseEvent>) : void => {
        event.preventDefault();
-       let time : string = format(new Date(), 'dd MMMM yyyy');
        const item : Expenses = {
-            newTime,
-            option,
-            date: time,
+            newTime: newTime === '' ? '0' : newTime,
+            option: optionExpenses,
+            date,
             value: "-",
-            id: uuid4()
+            id: v4()
         } 
         addNewItem(item)
-        setTime("")
     }
 
     const handleClickIncome = (event:React.MouseEvent<HTMLButtonElement, MouseEvent>) : void => {
         event.preventDefault();
-        let time : string = format(new Date(), 'dd MMMM yyyy');
         const item : Expenses = {
-             newTime: Balans,
-             option: cathegory,
-             date: time,
+             newTime: Balans === '' ? '0' : Balans,
+             option: optionIncome,
+             date,
              value: "+",
-             id: uuid4()
+             id: v4()
          } 
          addNewItem(item)
-         setCathegory("")
-         setBalans("")
      }
 
     const addNewItem = (item : Expenses): void =>{
-        Data.unshift(item)
+        setTime('')
+        setBalans('')
         currentAmount(expenses)
-        localStorage.setItem('notes', JSON.stringify(Data))
+        setExpenses([item, ...expenses]) 
+        let newData = Array.from(expenses)
+        newData.push(item)
+        localStorage.setItem("notes", JSON.stringify(newData));
     }
 
-    const deleteItem = (ex : Expenses) : void => {
-        let newData : Array<Expenses> = JSON.parse(JSON.stringify(expenses))
-        const newItems: Expenses[] = newData.filter(it => it.id !== ex.id);
-        setExpenses(newItems);
+    const deleteItem = (id : string) : void => {
+        currentAmount(expenses)
+        let newData = Array.from(expenses)
+        let newItems : Expenses[] = newData.filter(it => it.id !== id);
+        setExpenses(newItems); 
         localStorage.setItem("notes", JSON.stringify(newItems));
     }
 
-    const currentAmount = (expenses) => {
+    const currentAmount = (expenses : Expenses[]) => {
         let sum = 0;
-        expenses.map(ex => {
-            ex.value === "-" ? (sum = sum - Number(ex.newTime)) : (sum = sum + Number(ex.newTime))
+        expenses.map((ex : Expenses) => {
+            return ex.value === "-" ? (sum = sum - Number(ex.newTime)) : (sum = sum + Number(ex.newTime))
         })
         return sum;
     }
@@ -82,37 +86,58 @@ function Forms (){
         </div>
         </div>
        
-        <form className='flex lg:flex-row flex-wrap flex-col w-full justify-start items-center lg:gap-1 gap-5 lg:pt-0 pt-8 lg:pb-4'>
+        <form 
+            className='flex lg:flex-row flex-wrap flex-col w-full justify-start items-center lg:gap-1 gap-5 lg:pt-0 pt-8 lg:pb-4'>
             <p className="text-sm font-semibold w-full text-slate-400">Income</p>
             <input 
-                onChange={(event) => {setBalans(event.target.value)}}
+                onChange={(event) => {
+                    let price = event.target.value;
+                    // price = price.replace(/[^0-9]/g, '');
+                    setBalans(price) 
+                }}
                 value={Balans}
                 placeholder="00.00"
                 type="text" 
-                className="rounded-md border border-gray-300 bg-white py-2 pl-3 px-1 pr-10 text-left shadow-sm focus:border-red-500 
+                className="rounded-md border border-gray-300 bg-white py-2 pl-3 px-1 pr-2 text-left shadow-sm focus:border-red-500 
                 focus:outline-none focus:ring-1 
                 focus:ring-red-500 sm:text-sm text-sm 
-                md:w-2/6 w-full cursor-pointer ">
-            </input> 
+                md:w-1/4 w-full cursor-pointer"                
+                >
+            </input>
+
+            <select 
+                value={optionIncome}
+                onChange={(event) => setOptionIncome(event.target.value)}
+                className="rounded-md border border-gray-300 bg-white py-2 pl-3 px-1 pl-3 pr-10 text-left shadow-sm focus:border-red-500 
+                focus:outline-none focus:ring-1 
+                focus:ring-red-500 sm:text-sm text-sm
+                md:w-1/4 w-full cursor-pointer">
+                    {itemsIncome.map(item => <option key={v4()}>{item}</option>)}
+            </select>  
 
             <input 
-                onChange={(event) => {setCathegory(event.target.value)}}
-                value={cathegory}
-                placeholder="Cathegory"
-                type="text" 
-                className="rounded-md border border-gray-300 bg-white py-2 pl-3 px-1 pr-10 text-left shadow-sm focus:border-red-500 
+                type = "date"
+                value={date} 
+                onChange={(e) => { 
+                    let a =  format(new Date(e.target.value), 'dd MMMM yyyy');
+                    setDate(a)}
+                }      
+                className="rounded-md border border-gray-300 bg-white py-2 pl-3 px-1 pr-2 text-left shadow-sm focus:border-red-500 
                 focus:outline-none focus:ring-1 
                 focus:ring-red-500 sm:text-sm text-sm 
-                md:w-2/6 w-full cursor-pointer ">
-            </input> 
-            <Button title="ADD" type="submit" handleClick={handleClickIncome} />
+                md:w-1/4 w-full cursor-pointer"> 
+            </input>
+
+            <Button title="ADD" type="submit" onClick={handleClickIncome}/>
         </form>
-        <form className='flex lg:flex-row flex-wrap flex-col w-full justify-start items-center lg:gap-1 gap-5 lg:pt-0 pt-8'>
+        <form 
+            className='flex lg:flex-row flex-wrap flex-col w-full justify-start items-center lg:gap-1 gap-5 lg:pt-0 pt-8'>
          <p className="text-sm font-semibold w-full text-slate-400">Expenses</p>
             <input 
                 onChange={(event) => {
                     let price = event.target.value;
                     price = price.replace(/[^0-9]/g, '');
+                    console.log(price)
                     setTime(price)}
                 }
                 value={newTime}
@@ -121,19 +146,34 @@ function Forms (){
                 className="rounded-md border border-gray-300 bg-white py-2 pl-3 px-1 pr-10 text-left shadow-sm focus:border-red-500 
                 focus:outline-none focus:ring-1 
                 focus:ring-red-500 sm:text-sm text-sm 
-                md:w-2/6 w-full cursor-pointer ">
-            </input> 
+                md:w-1/4 w-full cursor-pointer "
+                >
+            </input>
 
             <select 
-                value={option}
-                onChange={(event) => setOption(event.target.value)}
+                value={optionExpenses}
+                onChange={(event) => setOptionExpenses(event.target.value)}
                 className="rounded-md border border-gray-300 bg-white py-2 pl-3 px-1 pl-3 pr-10 text-left shadow-sm focus:border-red-500 
                 focus:outline-none focus:ring-1 
                 focus:ring-red-500 sm:text-sm text-sm
-                md:w-2/6 w-full cursor-pointer">
-                    {items.map(item => <option key={uuid4()}>{item}</option>)}
+                md:w-1/4 w-full cursor-pointer">
+                    {itemsExpenses.map(item => <option key={v4()}>{item}</option>)}
             </select> 
-                <Button title="ADD" type="submit" handleClick={handleClickExpenses} />
+
+            <input 
+                value={date} 
+                type = "date"
+                onChange={(e) => { 
+                    let a =  format(new Date(e.target.value), 'dd MMMM yyyy');
+                    setDate(a)}
+                }      
+                className="rounded-md border border-gray-300 bg-white py-2 pl-3 px-1 pr-2 text-left shadow-sm focus:border-red-500 
+                focus:outline-none focus:ring-1 
+                focus:ring-red-500 sm:text-sm text-sm 
+                md:w-1/4 w-full cursor-pointer"> 
+            </input>
+
+                <Button title="ADD" type="submit" onClick={handleClickExpenses}/>
          </form>
 
         <div onClick={() => setIsActive(!isActive)}
@@ -144,17 +184,19 @@ function Forms (){
 
         {isActive &&  
             <div className="flex flex-col items-center w-full lg:text-2xl text-2xl diagrams bg-white">
-            <SumAll expenses={expenses}/>
+            <SumAllExpenses expenses={expenses}/>
+            <SumAllIncome expenses={expenses}/>
         </div>}
 
         <div className="w-full flex flex-row flex-wrap gap-4 lg:justify-end justify-center items-end pt-10">
-            <button className="buttonFilter hover:bg-slate-100">Income</button>
-            <button className="buttonFilter hover:bg-slate-100 ">Expenses</button>
-            <FilterCathegory setExpenses={setExpenses}/>
-            <FilterMonth setExpenses={setExpenses}/>
+            <ButtonFilters title='Income' setExpenses={setExpenses}/>
+            <ButtonFilters title='Expenses' setExpenses={setExpenses}/>
+            <ButtonFilters title='All' setExpenses={setExpenses}/>
+            <FilterCathegory setExpenses={setExpenses} expenses={expenses}/>
+            <FilterMonth setExpenses={setExpenses} expenses={expenses}/>
         </div>
         
-        <Render expenses={expenses} deleteItem={deleteItem}/>
+        <Render expenses={expenses} deleteItem={deleteItem} setExpenses={setExpenses}/>
         
        </div>
     );

@@ -1,22 +1,20 @@
 import uuid4 from "uuid4";
 import { useState } from "react";
-import Data from "components/Data";
 import { Expenses } from "components/Render";
 
-function FilterMonth({setExpenses}){
+function FilterMonth({setExpenses, expenses}){
 
     const months : Array<string>= ['Months','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December']
     const [options, setOptions] = useState('month')
-    
+
     const Filters = (ev : string) : void => {
         setOptions(ev);
-
         if (ev !== 'Months'){
-            const newItem : Array<object> = Data.filter((newVal : Expenses) => {
+            const newItem : Array<object> = JSON.parse(localStorage.getItem('notes')).filter((newVal : Expenses) => {
                 let month : string =  newVal.date.slice(3).slice(0, -5) 
                 return month === ev; 
             });
-            setExpenses(newItem)} else{setExpenses(Data)}
+            setExpenses(newItem)} else{setExpenses(JSON.parse(localStorage.getItem('notes')))}
     }
     
     return(
