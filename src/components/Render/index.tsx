@@ -14,7 +14,8 @@ function Render({expenses, deleteItem, setExpenses}){
 
     useEffect(() => {
         const note = JSON.parse(localStorage.getItem('notes')  || 'null');
-        (note !== null) ? setExpenses(note) : setExpenses(Data)     
+        (note !== null) ? setExpenses(note) : setExpenses(Data)    
+        // eslint-disable-next-line react-hooks/exhaustive-deps 
       }, []);
 
     let CurrencyFormat = require('react-currency-format');

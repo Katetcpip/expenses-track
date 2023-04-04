@@ -1,13 +1,11 @@
-import { itemsExpenses, itemsIncome } from "components/Forms";
+import { itemsExpenses } from "components/Forms";
 import DiagramExpenses from "components/DiagramExpenses";
 import { Expenses } from "components/Render";
-// import { checkLocalStorage } from "components/Render";
 
 function SumAllExpenses({expenses}){
 
     let CurrencyFormat = require('react-currency-format');
     function sum(cathegory : string){
-        // let expensesNew = checkLocalStorage();
         let expensesNew : Expenses[]= Array.from(expenses)
         let newArr : Array<Expenses> = expensesNew.filter((item : Expenses) => item.option === cathegory);
         let sumFood : number = 0;
@@ -19,7 +17,6 @@ function SumAllExpenses({expenses}){
     }
 
     function totalSumExpenses() : JSX.Element{
-        // let expensesNew = checkLocalStorage();
         let expensesNew : Expenses[] = Array.from(expenses)
         let arrExpenses = expensesNew.filter(el => el.value === "-")
         let sumTotal : number = 0;
